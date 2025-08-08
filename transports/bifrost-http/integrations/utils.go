@@ -622,14 +622,15 @@ func (g *GenericRouter) sendSuccess(ctx *fasthttp.RequestCtx, errorConverter Err
 
 // validProviders is a pre-computed map for efficient O(1) provider validation.
 var validProviders = map[schemas.ModelProvider]bool{
-	schemas.OpenAI:    true,
-	schemas.Azure:     true,
-	schemas.Anthropic: true,
-	schemas.Bedrock:   true,
-	schemas.Cohere:    true,
-	schemas.Vertex:    true,
-	schemas.Mistral:   true,
-	schemas.Ollama:    true,
+	schemas.OpenAI:     true,
+	schemas.Azure:      true,
+	schemas.ParasailAI: true,
+	schemas.Anthropic:  true,
+	schemas.Bedrock:    true,
+	schemas.Cohere:     true,
+	schemas.Vertex:     true,
+	schemas.Mistral:    true,
+	schemas.Ollama:     true,
 }
 
 // ParseModelString extracts provider and model from a model string.
@@ -693,6 +694,11 @@ func GetProviderFromModel(model string) schemas.ModelProvider {
 		return schemas.Cohere
 	}
 
+	// ParasailAI Models - comprehensive pattern matching
+	if isParasailAIModel(modelLower) {
+		return schemas.ParasailAI
+	}
+
 	// Default to OpenAI for unknown models (most LiteLLM compatible)
 	return schemas.OpenAI
 }
@@ -701,6 +707,9 @@ func GetProviderFromModel(model string) schemas.ModelProvider {
 func isOpenAIModel(model string) bool {
 	// Exclude Azure models to prevent overlap
 	if strings.Contains(model, "azure/") {
+		return false
+	}
+	if strings.Contains(model, "parasail") {
 		return false
 	}
 
@@ -719,6 +728,15 @@ func isAzureModel(model string) bool {
 	}
 
 	return matchesAnyPattern(model, azurePatterns)
+}
+
+func isParasailAIModel(model string) bool {
+	parasailAiPatterns := []string{
+		"parasail", "kimi", "deepseek", "gemma", "llama", "qwen",
+		"skyfall", "mistral", "glm", "gpt-oss",
+	}
+
+	return matchesAnyPattern(model, parasailAiPatterns)
 }
 
 // isAnthropicModel checks for Anthropic Claude model patterns

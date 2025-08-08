@@ -1,4 +1,4 @@
-export const PROVIDERS = ['openai', 'anthropic', 'azure', 'bedrock', 'cohere', 'vertex', 'mistral', 'ollama', 'groq', 'sgl'] as const
+export const PROVIDERS = ['openai', 'anthropic', 'azure', 'bedrock', 'cohere', 'vertex', 'mistral', 'ollama', 'groq', 'sgl', 'parasailai'] as const
 
 export const STATUSES = ['success', 'error', 'processing', 'cancelled'] as const
 
@@ -16,6 +16,7 @@ export const REQUEST_TYPES = [
 
 export const PROVIDER_LABELS = {
   openai: 'OpenAI',
+  parasailai: 'ParasailAI',
   anthropic: 'Anthropic',
   azure: 'Azure OpenAI',
   bedrock: 'AWS Bedrock',

@@ -60,6 +60,7 @@ func NewLiteLLMRouter(client *bifrost.Bifrost) *LiteLLMRouter {
 		schemas.Anthropic,
 		schemas.Vertex,
 		schemas.Azure,
+		schemas.ParasailAI,
 	}
 
 	// Pre-hook to determine provider and parse request with correct type
@@ -88,7 +89,7 @@ func NewLiteLLMRouter(client *bifrost.Bifrost) *LiteLLMRouter {
 		// Create the appropriate request type based on provider and re-parse
 		var actualReq interface{}
 		switch provider {
-		case schemas.OpenAI, schemas.Azure:
+		case schemas.OpenAI, schemas.ParasailAI, schemas.Azure:
 			actualReq = &openai.OpenAIChatRequest{}
 		case schemas.Anthropic:
 			actualReq = &anthropic.AnthropicMessageRequest{}
@@ -144,7 +145,7 @@ func NewLiteLLMRouter(client *bifrost.Bifrost) *LiteLLMRouter {
 
 	responseConverter := func(resp *schemas.BifrostResponse) (interface{}, error) {
 		switch resp.ExtraFields.Provider {
-		case schemas.OpenAI, schemas.Azure:
+		case schemas.OpenAI, schemas.ParasailAI, schemas.Azure:
 			return openai.DeriveOpenAIFromBifrostResponse(resp), nil
 		case schemas.Anthropic:
 			return anthropic.DeriveAnthropicFromBifrostResponse(resp), nil
@@ -157,7 +158,7 @@ func NewLiteLLMRouter(client *bifrost.Bifrost) *LiteLLMRouter {
 
 	errorConverter := func(err *schemas.BifrostError) interface{} {
 		switch err.Provider {
-		case schemas.OpenAI, schemas.Azure:
+		case schemas.OpenAI, schemas.ParasailAI, schemas.Azure:
 			return openai.DeriveOpenAIErrorFromBifrostError(err)
 		case schemas.Anthropic:
 			return anthropic.DeriveAnthropicErrorFromBifrostError(err)
@@ -180,7 +181,7 @@ func NewLiteLLMRouter(client *bifrost.Bifrost) *LiteLLMRouter {
 
 		// Route to the appropriate provider's streaming converter based on provider type
 		switch provider {
-		case schemas.OpenAI, schemas.Azure:
+		case schemas.OpenAI, schemas.ParasailAI, schemas.Azure:
 			return openai.DeriveOpenAIStreamFromBifrostResponse(resp), nil
 		case schemas.Anthropic:
 			return anthropic.DeriveAnthropicStreamFromBifrostResponse(resp), nil
@@ -193,7 +194,7 @@ func NewLiteLLMRouter(client *bifrost.Bifrost) *LiteLLMRouter {
 
 	streamErrorConverter := func(err *schemas.BifrostError) interface{} {
 		switch err.Provider {
-		case schemas.OpenAI, schemas.Azure:
+		case schemas.OpenAI, schemas.ParasailAI, schemas.Azure:
 			return openai.DeriveOpenAIStreamFromBifrostError(err)
 		case schemas.Anthropic:
 			return anthropic.DeriveAnthropicStreamFromBifrostError(err)

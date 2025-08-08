@@ -679,6 +679,8 @@ func (bifrost *Bifrost) createProviderFromProviderKey(providerKey schemas.ModelP
 		return providers.NewGroqProvider(config, bifrost.logger)
 	case schemas.SGL:
 		return providers.NewSGLProvider(config, bifrost.logger)
+	case schemas.ParasailAI:
+		return providers.NewParasailAIProvider(config, bifrost.logger), nil
 	default:
 		return nil, fmt.Errorf("unsupported provider: %s", providerKey)
 	}

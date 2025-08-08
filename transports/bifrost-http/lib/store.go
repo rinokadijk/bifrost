@@ -1635,9 +1635,10 @@ func (s *ConfigStore) CleanupEnvKeysForUpdatedKeys(provider string, keysToUpdate
 func (s *ConfigStore) autoDetectProviders() {
 	// Define common environment variable patterns for each provider
 	providerEnvVars := map[schemas.ModelProvider][]string{
-		schemas.OpenAI:    {"OPENAI_API_KEY", "OPENAI_KEY"},
-		schemas.Anthropic: {"ANTHROPIC_API_KEY", "ANTHROPIC_KEY"},
-		schemas.Mistral:   {"MISTRAL_API_KEY", "MISTRAL_KEY"},
+		schemas.OpenAI:     {"OPENAI_API_KEY", "OPENAI_KEY"},
+		schemas.ParasailAI: {"OPENAI_API_KEY", "PARASAILAI_KEY"},
+		schemas.Anthropic:  {"ANTHROPIC_API_KEY", "ANTHROPIC_KEY"},
+		schemas.Mistral:    {"MISTRAL_API_KEY", "MISTRAL_KEY"},
 	}
 
 	detectedCount := 0
